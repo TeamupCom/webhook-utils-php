@@ -1,0 +1,111 @@
+{
+  "events":[
+    {
+      "trigger":"event.removed",
+      "id":"1",
+      "series_id":null,
+      "remote_id":null,
+      "subcalendar_id":1,
+      "subcalendar_ids":[
+        1,
+        5
+      ],
+      "all_day":true,
+      "rrule":"",
+      "title":"test",
+      "who":"test",
+      "location":"test",
+      "notes":{
+        "html":"<p>test</p>"
+      },
+      "version":"50e74fc6d94e",
+      "readonly":false,
+      "tz":"America/Sao_Paulo",
+      "attachments":[
+
+      ],
+      "start_dt":"2024-08-30T00:00:00",
+      "end_dt":"2024-08-30T23:59:00",
+      "ristart_dt":null,
+      "rsstart_dt":null,
+      "creation_dt":"2024-08-22T13:36:59-03:00",
+      "update_dt":"2024-08-22T13:40:27-03:00",
+      "delete_dt":"2024-08-22T13:44:56-03:00",
+      "comments_enabled":true,
+      "comments_visibility":true,
+      "comments":[
+        {
+          "id":5,
+          "name":"Andrey Postal",
+          "email":"andrey@email.com",
+          "email_hash":"5df758c33f914d3a8d346494614ac6bb",
+          "message":{
+            "html":"<p>test</p>"
+          },
+          "remote_id":null,
+          "creation_dt":"2024-08-22T13:37:56-03:00",
+          "update_dt":"2024-08-22T13:39:54-03:00",
+          "updater":"Andrey Postal"
+        },
+        {
+          "id":4,
+          "name":"Andrey Postal",
+          "email":"andrey@email.com",
+          "email_hash":"5df758c33f914d3a8d346494614ac6bb",
+          "message":{
+            "html":"<p>test 2</p>"
+          },
+          "remote_id":null,
+          "creation_dt":"2024-08-22T13:37:34-03:00",
+          "update_dt":null,
+          "updater":""
+        }
+      ],
+      "signup_enabled":true,
+      "signup_deadline":"2024-08-30T00:00:00-03:00",
+      "signup_visibility":"users_with_modify_permission",
+      "signup_limit":10,
+      "signup_count":2,
+      "signup_deadline_enabled":true,
+      "signups":[
+        {
+          "id":4,
+          "name":"Andrey Postal",
+          "email":"andrey@email.com",
+          "email_hash":"648b235ce0a3045f832b1e7393bba746",
+          "remote_id":null,
+          "readonly":false,
+          "creation_dt":"2024-08-22T13:40:27-03:00",
+          "update_dt":null
+        },
+        {
+          "id":3,
+          "name":"Andrey Postal",
+          "email":"andrey+p@email.com",
+          "email_hash":"5df758c33f914d3a8d346494614ac6bb",
+          "remote_id":null,
+          "readonly":false,
+          "creation_dt":"2024-08-22T13:40:05-03:00",
+          "update_dt":null
+        }
+      ]
+    }
+  ],
+  "sub_calendars":[
+    {
+      "id":1,
+      "name":"Calendar 1",
+      "active":true,
+      "created_at":1716773216,
+      "updated_at":null
+    },
+    {
+      "id":5,
+      "name":"Calendar 5",
+      "active":true,
+      "created_at":1721044854,
+      "updated_at":null
+    }
+  ],
+  "now":1724345129221888
+}
