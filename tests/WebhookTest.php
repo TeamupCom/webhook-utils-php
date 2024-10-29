@@ -4,17 +4,19 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\StreamInterface;
-use Teamup\Webhook\Exception\InvalidSignatureException;
+use Teamup\Webhook\Exceptions\InvalidSignatureException;
 use Teamup\Webhook\HandlerInterface;
 use Teamup\Webhook\Parser;
-use Teamup\Webhook\Payload\Event;
-use Teamup\Webhook\Payload\Payload;
+use Teamup\Webhook\Payload\Dispatch;
 use Teamup\Webhook\Trigger;
 use Teamup\Webhook\Webhook;
 
 #[CoversClass(Webhook::class)]
 final class WebhookTest extends TestCase
 {
+    private const SECRET = '6xMtKaczFwpJoyv43KxaXSEjg2jN1Fut9uEY7xv3NKgmn5HU8qNCfBDhVruwZsuDUytaR8L8yDZP6nfPpnLw5d8ffniRKfqGnN3hNuGvMZRf7PTNVuorCcVuY62b58qG';
+    private const SIGNATURE = '4d49452cab75de9852b72616376d9293b82ad137dbdb9dc2e06e6b270fe1cb10';
+
     /**
      * @throws InvalidSignatureException
      * @throws JsonException
@@ -23,8 +25,6 @@ final class WebhookTest extends TestCase
      */
     public function testWebhook(): void
     {
-        $accessKey = 'abc';
-        $signature = 'e37d453137799807e880aa6023ca9556e7a076567099038941b5f3ffc6af5160';
         $content = file_get_contents(implode(DIRECTORY_SEPARATOR, [__DIR__, 'data', 'payload.json']));
         $s = $this->createMock(StreamInterface::class);
         $s->method('getContents')->willReturn($content);
@@ -33,18 +33,20 @@ final class WebhookTest extends TestCase
         $r->method('getBody')->willReturn($s);
         $r->method('getHeader')
             ->withAnyParameters()
-            ->willReturn(['application/json'], [$signature], [$accessKey], ['application/json'], [$signature], [$accessKey]);
+            ->willReturn(['application/json'],
+                [self::SIGNATURE],
+                ['application/json'],
+                [self::SIGNATURE],
+            );
 
-        $parser = new Parser([
-            $accessKey => 'def',
-        ]);
+        $parser = new Parser(self::SECRET);
 
         $h1 = new class implements HandlerInterface {
             public bool $called = false;
+
             public function __invoke(
                 RequestInterface $request,
-                Event $event,
-                Payload $payload
+                Dispatch $dispatch,
             ): void {
                 $this->called = true;
             }
@@ -52,10 +54,10 @@ final class WebhookTest extends TestCase
 
         $h2 = new class implements HandlerInterface {
             public bool $called = false;
+
             public function __invoke(
                 RequestInterface $request,
-                Event $event,
-                Payload $payload
+                Dispatch $dispatch,
             ): void {
                 $this->called = true;
             }
@@ -63,13 +65,13 @@ final class WebhookTest extends TestCase
 
         $webhook = new Webhook($parser);
         $webhook->registerHandler(Trigger::Any, $h1);
-        $webhook->registerHandler(Trigger::EventRemoved, $h2);
+        $webhook->registerHandler(Trigger::EventModified, $h2);
         $webhook->handle($r);
 
         $this->assertTrue($h1->called);
         $this->assertTrue($h2->called);
 
-        $webhook = new Webhook(new Parser(['key' => 'secret']));
+        $webhook = new Webhook(new Parser(self::SECRET));
         // without handlers
         $this->expectException(InvalidArgumentException::class);
         $webhook->handle($r);

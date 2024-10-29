@@ -6,7 +6,7 @@ use InvalidArgumentException;
 use JsonException;
 use Psr\Http\Message\RequestInterface;
 use ReflectionException;
-use Teamup\Webhook\Exception\InvalidSignatureException;
+use Teamup\Webhook\Exceptions\InvalidSignatureException;
 
 class Webhook
 {
@@ -14,7 +14,8 @@ class Webhook
     private array $handlers = [];
 
     public function __construct(private readonly Parser $parser)
-    { }
+    {
+    }
 
     public function registerHandler(Trigger $trigger, HandlerInterface $handler): void
     {
@@ -32,14 +33,19 @@ class Webhook
     public function handle(RequestInterface $request): void
     {
         $payload = $this->parser->extract($request);
-        foreach ($payload->events as $event) {
-            $handlers = [ ...($this->handlers[$event->trigger->value] ?? []), ...($this->handlers[Trigger::Any->value] ?? []) ];
+        foreach ($payload->dispatch as $d) {
+            $handlers = [
+                ...($this->handlers[$d->trigger->value] ?? []),
+                ...($this->handlers[Trigger::Any->value] ?? [])
+            ];
             if (count($handlers) === 0) {
-                throw new InvalidArgumentException(sprintf('no handler registered for trigger \'%s\'', $event->trigger->value));
+                throw new InvalidArgumentException(
+                    sprintf('no handler registered for trigger \'%s\'', $d->trigger->value)
+                );
             }
 
             foreach ($handlers as $handler) {
-                $handler($request, $event, $payload);
+                $handler($request, $d);
             }
         }
     }

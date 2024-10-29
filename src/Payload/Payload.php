@@ -1,32 +1,18 @@
 <?php
+
 namespace Teamup\Webhook\Payload;
 
-use Andrey\JsonHandler\Attributes\JsonItemAttribute;
-use Andrey\JsonHandler\Attributes\JsonObjectAttribute;
-use Andrey\JsonHandler\JsonHandler;
-use JsonException;
-use JsonSerializable;
-use ReflectionException;
+use Teamup\Webhook\Attributes\PayloadItem;
+use Teamup\Webhook\Attributes\PayloadObject;
 
-#[JsonObjectAttribute]
-final class Payload implements JsonSerializable
+#[PayloadObject]
+class Payload
 {
-    /** @var Event[] */
-    #[JsonItemAttribute(type: Event::class)]
-    public array $events;
-    /** @var SubCalendar[] */
-    #[JsonItemAttribute(key: 'sub_calendars', type: SubCalendar::class)]
-    public array $subCalendars;
-    public int $now;
-
-
+    public string $id;
+    public string $calendar;
     /**
-     * @return array<string, mixed>
-     * @throws ReflectionException
-     * @throws JsonException
+     * @var Dispatch[]
      */
-    public function jsonSerialize(): array
-    {
-        return (new JsonHandler())->serialize($this);
-    }
+    #[PayloadItem(type: Dispatch::class)]
+    public array $dispatch;
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Teamup\Webhook\Exception;
+namespace Teamup\Webhook\Exceptions;
 
 use Exception;
 

@@ -1,111 +1,172 @@
 {
-  "events":[
+  "id": "01JBB7RCZ62Q2GNQHQTGCFQ2XY",
+  "calendar": "jch4f8",
+  "dispatch": [
     {
-      "trigger":"event.removed",
-      "id":"1",
-      "series_id":null,
-      "remote_id":null,
-      "subcalendar_id":1,
-      "subcalendar_ids":[
-        1,
-        5
-      ],
-      "all_day":true,
-      "rrule":"",
-      "title":"test",
-      "who":"test",
-      "location":"test",
-      "notes":{
-        "html":"<p>test</p>"
-      },
-      "version":"50e74fc6d94e",
-      "readonly":false,
-      "tz":"America/Sao_Paulo",
-      "attachments":[
-
-      ],
-      "start_dt":"2024-08-30T00:00:00",
-      "end_dt":"2024-08-30T23:59:00",
-      "ristart_dt":null,
-      "rsstart_dt":null,
-      "creation_dt":"2024-08-22T13:36:59-03:00",
-      "update_dt":"2024-08-22T13:40:27-03:00",
-      "delete_dt":"2024-08-22T13:44:56-03:00",
-      "comments_enabled":true,
-      "comments_visibility":true,
-      "comments":[
-        {
-          "id":5,
-          "name":"Andrey Postal",
-          "email":"andrey@email.com",
-          "email_hash":"5df758c33f914d3a8d346494614ac6bb",
-          "message":{
-            "html":"<p>test</p>"
-          },
-          "remote_id":null,
-          "creation_dt":"2024-08-22T13:37:56-03:00",
-          "update_dt":"2024-08-22T13:39:54-03:00",
-          "updater":"Andrey Postal"
+      "trigger": "event_signup.created",
+      "event": {
+        "id": "180353891",
+        "series_id": null,
+        "remote_id": null,
+        "subcalendar_id": 4822408,
+        "subcalendar_ids": [
+          4822408
+        ],
+        "all_day": false,
+        "rrule": "",
+        "title": "test",
+        "who": "",
+        "location": "",
+        "notes": {
+          "html": ""
         },
-        {
-          "id":4,
-          "name":"Andrey Postal",
-          "email":"andrey@email.com",
-          "email_hash":"5df758c33f914d3a8d346494614ac6bb",
-          "message":{
-            "html":"<p>test 2</p>"
-          },
-          "remote_id":null,
-          "creation_dt":"2024-08-22T13:37:34-03:00",
-          "update_dt":null,
-          "updater":""
+        "version": "de64c8f2fb92",
+        "readonly": false,
+        "tz": "America/Sao_Paulo",
+        "attachments": [
+          {
+            "id": "01JBB76V0GPYQ34Q27V2KVGAMF",
+            "name": "generic.jpg",
+            "size": 41181,
+            "mimetype": "image/jpeg",
+            "upload_dt": "2024-10-27T04:05:41+00:00",
+            "link": "https://teamup.com",
+            "thumbnail": "https://teamup.com",
+            "preview": "https://teamup.com",
+            "upload_date": "2024-10-27T04:05:41+00:00"
+          }
+        ],
+        "start_dt": "2024-11-01T10:00:00-05:00",
+        "end_dt": "2024-11-01T11:00:00-05:00",
+        "ristart_dt": null,
+        "rsstart_dt": null,
+        "creation_dt": "2024-10-26T22:31:36-05:00",
+        "update_dt": "2024-10-26T23:14:43-05:00",
+        "delete_dt": null,
+        "signup_enabled": true,
+        "signup_deadline": "2024-11-01T10:00:00-05:00",
+        "signup_visibility": "all_users",
+        "signup_limit": 0,
+        "signup_count": 1,
+        "signup_deadline_enabled": false,
+        "signups": [
+          {
+            "id": 25,
+            "name": "test",
+            "email": "",
+            "email_hash": "098f6bcd4621d373cade4e832627b4f6",
+            "remote_id": null,
+            "readonly": false,
+            "creation_dt": "2024-10-26T23:14:43-05:00",
+            "update_dt": null
+          }
+        ],
+        "comments_enabled": true,
+        "comments_visibility": "all_users",
+        "comments": [
+          {
+            "id": 14,
+            "name": "test",
+            "email": "",
+            "email_hash": "098f6bcd4621d373cade4e832627b4f6",
+            "message": {
+              "html": "<p>test</p>"
+            },
+            "remote_id": null,
+            "creation_dt": "2024-10-26T23:05:08-05:00",
+            "update_dt": null,
+            "updater": ""
+          }
+        ],
+        "custom": {
+          "status": [
+            "waiting"
+          ]
         }
-      ],
-      "signup_enabled":true,
-      "signup_deadline":"2024-08-30T00:00:00-03:00",
-      "signup_visibility":"users_with_modify_permission",
-      "signup_limit":10,
-      "signup_count":2,
-      "signup_deadline_enabled":true,
-      "signups":[
-        {
-          "id":4,
-          "name":"Andrey Postal",
-          "email":"andrey@email.com",
-          "email_hash":"648b235ce0a3045f832b1e7393bba746",
-          "remote_id":null,
-          "readonly":false,
-          "creation_dt":"2024-08-22T13:40:27-03:00",
-          "update_dt":null
-        },
-        {
-          "id":3,
-          "name":"Andrey Postal",
-          "email":"andrey+p@email.com",
-          "email_hash":"5df758c33f914d3a8d346494614ac6bb",
-          "remote_id":null,
-          "readonly":false,
-          "creation_dt":"2024-08-22T13:40:05-03:00",
-          "update_dt":null
-        }
-      ]
-    }
-  ],
-  "sub_calendars":[
-    {
-      "id":1,
-      "name":"Calendar 1",
-      "active":true,
-      "created_at":1716773216,
-      "updated_at":null
+      }
     },
     {
-      "id":5,
-      "name":"Calendar 5",
-      "active":true,
-      "created_at":1721044854,
-      "updated_at":null
+      "trigger": "event.modified",
+      "event": {
+        "id": "180353891",
+        "series_id": null,
+        "remote_id": null,
+        "subcalendar_id": 4822408,
+        "subcalendar_ids": [
+          4822408
+        ],
+        "all_day": false,
+        "rrule": "",
+        "title": "test",
+        "who": "",
+        "location": "",
+        "notes": {
+          "html": ""
+        },
+        "version": "de64c8f2fb92",
+        "readonly": false,
+        "tz": "America/Sao_Paulo",
+        "attachments": [
+          {
+            "id": "01JBB76V0GPYQ34Q27V2KVGAMF",
+            "name": "generic.jpg",
+            "size": 41181,
+            "mimetype": "image/jpeg",
+            "upload_dt": "2024-10-27T04:05:41+00:00",
+            "link": "https://teamup.com",
+            "thumbnail": "https://teamup.com",
+            "preview": "https://teamup.com",
+            "upload_date": "2024-10-27T04:05:41+00:00"
+          }
+        ],
+        "start_dt": "2024-11-01T10:00:00-05:00",
+        "end_dt": "2024-11-01T11:00:00-05:00",
+        "ristart_dt": null,
+        "rsstart_dt": null,
+        "creation_dt": "2024-10-26T22:31:36-05:00",
+        "update_dt": "2024-10-26T23:14:43-05:00",
+        "delete_dt": null,
+        "signup_enabled": true,
+        "signup_deadline": "2024-11-01T10:00:00-05:00",
+        "signup_visibility": "all_users",
+        "signup_limit": 0,
+        "signup_count": 1,
+        "signup_deadline_enabled": false,
+        "signups": [
+          {
+            "id": 25,
+            "name": "test",
+            "email": "",
+            "email_hash": "098f6bcd4621d373cade4e832627b4f6",
+            "remote_id": null,
+            "readonly": false,
+            "creation_dt": "2024-10-26T23:14:43-05:00",
+            "update_dt": null
+          }
+        ],
+        "comments_enabled": true,
+        "comments_visibility": "all_users",
+        "comments": [
+          {
+            "id": 14,
+            "name": "test",
+            "email": "",
+            "email_hash": "098f6bcd4621d373cade4e832627b4f6",
+            "message": {
+              "html": "<p>test</p>"
+            },
+            "remote_id": null,
+            "creation_dt": "2024-10-26T23:05:08-05:00",
+            "update_dt": null,
+            "updater": ""
+          }
+        ],
+        "custom": {
+          "status": [
+            "waiting"
+          ]
+        }
+      }
     }
-  ],
-  "now":1724345129221888
+  ]
 }

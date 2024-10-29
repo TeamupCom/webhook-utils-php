@@ -4,31 +4,18 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\StreamInterface;
-use Teamup\Webhook\Exception\InvalidSignatureException;
-use Teamup\Webhook\Header;
+use Teamup\Webhook\Exceptions\InvalidSignatureException;
+use Teamup\Webhook\Hydrator;
 use Teamup\Webhook\Parser;
-use Teamup\Webhook\Payload\Attachment;
-use Teamup\Webhook\Payload\Comment;
-use Teamup\Webhook\Payload\CommentMessage;
-use Teamup\Webhook\Payload\Event;
-use Teamup\Webhook\Payload\Note;
 use Teamup\Webhook\Payload\Payload;
-use Teamup\Webhook\Payload\Signup;
-use Teamup\Webhook\Payload\SubCalendar;
 
 #[CoversClass(Parser::class)]
-#[CoversClass(Payload::class)]
-#[CoversClass(Header::class)]
-#[CoversClass(InvalidSignatureException::class)]
-#[CoversClass(Attachment::class)]
-#[CoversClass(Comment::class)]
-#[CoversClass(CommentMessage::class)]
-#[CoversClass(Event::class)]
-#[CoversClass(Note::class)]
-#[CoversClass(Signup::class)]
-#[CoversClass(SubCalendar::class)]
+#[CoversClass(Hydrator::class)]
 final class ParserTest extends TestCase
 {
+    private const SECRET = '6xMtKaczFwpJoyv43KxaXSEjg2jN1Fut9uEY7xv3NKgmn5HU8qNCfBDhVruwZsuDUytaR8L8yDZP6nfPpnLw5d8ffniRKfqGnN3hNuGvMZRf7PTNVuorCcVuY62b58qG';
+    private const SIGNATURE = '4d49452cab75de9852b72616376d9293b82ad137dbdb9dc2e06e6b270fe1cb10';
+
     /**
      * @throws ReflectionException
      * @throws JsonException
@@ -37,27 +24,25 @@ final class ParserTest extends TestCase
     {
         $content = file_get_contents(implode(DIRECTORY_SEPARATOR, [__DIR__, 'data', 'payload.json']));
 
-        $parser = new Parser(['abc' => 'def']);
+        $parser = new Parser(self::SECRET);
         $payload = $parser->parse($content);
         $this->assertEquals(Payload::class, $payload::class);
-        $this->assertCount(1, $payload->events);
+        $this->assertCount(2, $payload->dispatch);
     }
 
+    /**
+     * @throws InvalidSignatureException
+     */
     public function testSignatureIntegrity(): void
     {
-        $accessKey = 'abc';
-
         $content = file_get_contents(implode(DIRECTORY_SEPARATOR, [__DIR__, 'data', 'payload.json']));
-        $signature = 'e37d453137799807e880aa6023ca9556e7a076567099038941b5f3ffc6af5160';
-        $parser = new Parser([$accessKey => 'def']);
+        $parser = new Parser(self::SECRET);
+
+        $parser->verifyIntegrity($content, self::SIGNATURE);
 
         $this->expectException(InvalidSignatureException::class);
-        $parser->verifyIntegrity($accessKey, $content, 'invalid-signature');
-
-        $this->expectException(InvalidSignatureException::class);
-        $parser->verifyIntegrity($accessKey, $content, $signature.'0');
-
-        $parser->verifyIntegrity($accessKey, $content, $signature);
+        $parser->verifyIntegrity($content, 'invalid-signature');
+        $parser->verifyIntegrity($content, self::SIGNATURE . '0');
     }
 
     /**
@@ -68,8 +53,6 @@ final class ParserTest extends TestCase
      */
     public function testExtract(): void
     {
-        $accessKey = 'abc';
-        $signature = 'e37d453137799807e880aa6023ca9556e7a076567099038941b5f3ffc6af5160';
         $content = file_get_contents(implode(DIRECTORY_SEPARATOR, [__DIR__, 'data', 'payload.json']));
         $s = $this->createMock(StreamInterface::class);
         $s->method('getContents')->willReturn($content);
@@ -78,16 +61,16 @@ final class ParserTest extends TestCase
         $r->method('getBody')->willReturn($s);
         $r->method('getHeader')
             ->withAnyParameters()
-            ->willReturn(['application/json'], [$signature], [$accessKey]);
-
-        $this->expectException(InvalidSignatureException::class);
-        $parser = new Parser([$accessKey => 'other']);
-        $parser->extract($r);
+            ->willReturn(['application/json'], [self::SIGNATURE], ['application/json'], ['invalid']);
 
         // success
-        $parser = new Parser([$accessKey => 'def']);
+        $parser = new Parser(self::SECRET);
         $payload = $parser->extract($r);
         $this->assertEquals(Payload::class, $payload::class);
-        $this->assertCount(1, $payload->events);
+        $this->assertCount(2, $payload->dispatch);
+
+        $this->expectException(InvalidSignatureException::class);
+        $parser = new Parser(self::SECRET);
+        $parser->extract($r);
     }
 }

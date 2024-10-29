@@ -2,12 +2,11 @@
 
 namespace Teamup\Webhook;
 
-use Andrey\JsonHandler\JsonHandler;
 use InvalidArgumentException;
 use JsonException;
 use Psr\Http\Message\RequestInterface;
 use ReflectionException;
-use Teamup\Webhook\Exception\InvalidSignatureException;
+use Teamup\Webhook\Exceptions\InvalidSignatureException;
 use Teamup\Webhook\Payload\Payload;
 
 readonly class Parser
@@ -15,14 +14,9 @@ readonly class Parser
     private const HASH_ALG = 'sha256';
     private const ACCEPTED_CONTENT_TYPE = 'application/json';
 
-    /**
-     * @phpstan-type accessKey string
-     * @phpstan-type secretKey string
-     *
-     * @param array<accessKey, secretKey>  $keys
-     */
-    public function __construct(private array $keys)
-    { }
+    public function __construct(private string $secret, private HydratorInterface $hydrator = new Hydrator())
+    {
+    }
 
     /**
      * @param string $json
@@ -32,10 +26,7 @@ readonly class Parser
      */
     public function parse(string $json): Payload
     {
-        $handler = new JsonHandler();
-        /** @var Payload $payload */
-        $payload = $handler->hydrateObject($json, new Payload());
-        return $payload;
+        return $this->hydrator->hydrate($json, new Payload());
     }
 
     /**
@@ -50,27 +41,27 @@ readonly class Parser
         if (Header::ContentType->extract($request) !== self::ACCEPTED_CONTENT_TYPE) {
             throw new InvalidArgumentException('invalid content type');
         }
+
         $signature = Header::TeamupSignature->extract($request);
-        $accessKey = Header::TeamupAccessKey->extract($request);
 
         $json = $request->getBody()->getContents();
-        $this->verifyIntegrity($accessKey, $json, $signature);
+        $this->verifyIntegrity($json, $signature);
         return $this->parse($json);
     }
 
     /**
      * @throws InvalidSignatureException
      */
-    public function verifyIntegrity(string $accessKey, string $json, string $signature): void
+    public function verifyIntegrity(string $json, string $signature): void
     {
         $hash = hash_hmac(
             self::HASH_ALG,
             $json,
-            $this->keys[$accessKey] ?? throw new InvalidArgumentException(sprintf('secret key not found for access key \'%s\'', $accessKey)),
+            $this->secret,
         );
 
         if ($hash !== $signature) {
-            throw new InvalidSignatureException();
+            throw new InvalidSignatureException('failed to verify payload integrity');
         }
     }
 }
