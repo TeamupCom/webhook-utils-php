@@ -20,6 +20,14 @@ to route your localhost deployment.
 After configured, you will have access to your secret key. We will need it to verify
 the integrity of the webhook calls to make sure it is coming from Teamup servers.
 
+## Installation
+
+Install the latest version with:
+
+```bash
+$ composer require teamup/webhook-php
+```
+
 ## Webhook Implementation
 
 The webhook serving is pretty straight forward. It should not
