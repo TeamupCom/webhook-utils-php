@@ -14,15 +14,12 @@ use Teamup\Webhook\Payload\Payload;
 final class ParserTest extends TestCase
 {
     private const SECRET = '6xMtKaczFwpJoyv43KxaXSEjg2jN1Fut9uEY7xv3NKgmn5HU8qNCfBDhVruwZsuDUytaR8L8yDZP6nfPpnLw5d8ffniRKfqGnN3hNuGvMZRf7PTNVuorCcVuY62b58qG';
-    private const SIGNATURE = '4d49452cab75de9852b72616376d9293b82ad137dbdb9dc2e06e6b270fe1cb10';
+    private const SIGNATURE = '4ef624acedb83c1bde128eddbaec248e2b0eddc0bf8587d240d351e121a7dabd';
 
-    /**
-     * @throws ReflectionException
-     * @throws JsonException
-     */
     public function testSimpleParse(): void
     {
-        $content = file_get_contents(implode(DIRECTORY_SEPARATOR, [__DIR__, 'data', 'payload.json']));
+        $content = file_get_contents(__DIR__.'/data/payload.json');
+        $this->assertJson($content);
 
         $parser = new Parser(self::SECRET);
         $payload = $parser->parse($content);
@@ -30,12 +27,10 @@ final class ParserTest extends TestCase
         $this->assertCount(2, $payload->dispatch);
     }
 
-    /**
-     * @throws InvalidSignatureException
-     */
     public function testSignatureIntegrity(): void
     {
-        $content = file_get_contents(implode(DIRECTORY_SEPARATOR, [__DIR__, 'data', 'payload.json']));
+        $content = file_get_contents(__DIR__.'/data/payload.json');
+        $this->assertJson($content);
         $parser = new Parser(self::SECRET);
 
         $parser->verifyIntegrity($content, self::SIGNATURE);
@@ -45,22 +40,17 @@ final class ParserTest extends TestCase
         $parser->verifyIntegrity($content, self::SIGNATURE . '0');
     }
 
-    /**
-     * @throws InvalidSignatureException
-     * @throws JsonException
-     * @throws ReflectionException
-     * @throws \PHPUnit\Framework\MockObject\Exception
-     */
     public function testExtract(): void
     {
-        $content = file_get_contents(implode(DIRECTORY_SEPARATOR, [__DIR__, 'data', 'payload.json']));
-        $s = $this->createMock(StreamInterface::class);
+        $content = file_get_contents(__DIR__.'/data/payload.json');
+        $this->assertJson($content);
+
+        $s = $this->createStub(StreamInterface::class);
         $s->method('getContents')->willReturn($content);
 
-        $r = $this->createMock(RequestInterface::class);
+        $r = $this->createStub(RequestInterface::class);
         $r->method('getBody')->willReturn($s);
         $r->method('getHeader')
-            ->withAnyParameters()
             ->willReturn(['application/json'], [self::SIGNATURE], ['application/json'], ['invalid']);
 
         // success
